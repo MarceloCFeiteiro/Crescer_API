@@ -1,0 +1,22 @@
+{
+  "name": "crescer_front",
+  "version": "1.0.0",
+  "description": "Testes de Front",
+  "license": "ISC",
+  "author": "Feiteiro/Yago",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:dev": "cross-env ENV_FILE=.env.dev npx playwright test",
+    "test:qa": "cross-env ENV_FILE=.env.qa npx playwright test",
+    "test:prod": "cross-env ENV_FILE=.env.prod npx playwright test"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^10.0.0",
+    "@playwright/test": "^1.55.0",
+    "@types/node": "^24.3.0",
+    "cross-env": "^10.0.0",
+    "dotenv": "^17.2.2"
+  }
+}

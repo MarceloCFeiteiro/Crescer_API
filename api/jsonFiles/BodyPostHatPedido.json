@@ -1,0 +1,22 @@
+{
+  "bairro": "Bairro Teste",
+  "cep": "94945091",
+  "cidade": "Cidade Teste",
+  "cpf": "11086159705",
+  "cupom": "HATOFF",
+  "email": "teste@teste.com",
+  "endereco": "Rua teste",
+  "itens": [
+    {
+      "id": 15,
+      "nome": "Chapéu Gustavo Carvalho",
+      "price": 60,
+      "quantidade": 2
+    }
+  ],
+  "nome": "Marcelo",
+  "numero": "123",
+  "pagamento": "pix",
+  "telefone": "(51) 98758-7444",
+  "uf": "RS"
+}
