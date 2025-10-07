@@ -1,0 +1,242 @@
+# 🎓 Programa Crescer — Automação de Testes Backend  
+## 🧢 Hat Store API  
+> Guia de Treinamento QA — Módulo API  
+💬 *“Automação é confiança em cada requisição.”*
+
+---
+
+## 📘 Módulo 1 — Introdução ao Projeto
+
+### 🎯 Objetivo
+Este módulo apresenta o projeto **Crescer_API**, desenvolvido para ensinar QAs iniciantes a criar **testes automatizados de API** utilizando o **Playwright**.
+
+A API da **Hat Store** é um e-commerce fictício de chapéus, com funcionalidades de **cadastro de usuários**, **consulta de estoque** e **criação de pedidos**.  
+Aqui, você aprenderá a validar endpoints reais, interpretar respostas e construir automações de forma profissional.
+
+---
+
+### 🧰 Tecnologias Utilizadas
+| Tecnologia | Função |
+|-------------|--------|
+| **Node.js** | Ambiente de execução dos testes |
+| **Playwright** | Framework de automação de testes (modo API) |
+| **Faker.js** | Geração de dados falsos (usuários, emails) |
+| **Dotenv** | Leitura das variáveis de ambiente (.env) |
+| **Cross-env** | Controle de múltiplos ambientes (dev, qa, prod) |
+
+---
+
+## 🧱 Módulo 2 — Estrutura do Projeto
+
+A estrutura do repositório segue o padrão de organização usado no **Crescer Front**, adaptado para testes de API:
+
+```bash
+Crescer_API/
+├── api/
+│   ├── jsonFiles/
+│   │   ├── BodyPostHatPedido.json
+│   │   └── BodyPostRegisterUer.json
+│   ├── fixtures/
+│   │   └── authFixture.js
+│   ├── utils/
+│   │   └── helpers.js
+│   ├── tests/
+│   │   ├── getHatsEstoque.spec.js
+│   │   ├── postAuthUsuario.spec.js
+│   │   └── postHatsPedidos.spec.js
+│   └── hatStoreApi.js
+├── playwright.config.js
+├── package.json
+└── .env.dev / .env.qa
+```
+
+💡 **O que o QA aprende:**  
+- Como identificar onde ficam os testes.  
+- A função de cada camada: **API (requisições)**, **Fixtures (autenticação)** e **Helpers (dados de teste)**.  
+- Como o Playwright lê o ambiente através do `playwright.config.js`.
+
+---
+
+## 🧩 Módulo 3 — Teste 1: Cadastro de Usuário
+
+### 📄 Arquivo: `postAuthUsuario.spec.js`
+
+Este teste valida o endpoint `/auth/register`, responsável por cadastrar um novo usuário na API.
+
+```js
+test('Cadastro de novo usuário', async ({ request }) => {
+  const response = await request.post(`${BASE_URL}/auth/register`, {
+    data: user,
+  });
+  expect(response.status()).toBe(201);
+});
+```
+
+💡 **O que o QA aprende:**
+- Como enviar uma requisição **POST** usando o Playwright.  
+- A diferença entre **dados válidos e duplicados**.  
+- Como validar o **status code** esperado (`201`, `400`, `409`).  
+
+🧩 **Exercício prático:**
+> Crie um novo teste para o endpoint `/auth/login`, usando os mesmos dados de registro.  
+> Valide se a resposta contém o campo `token` e se o status é `200`.
+
+---
+
+## 🎩 Módulo 4 — Teste 2: Consulta de Estoque
+
+### 📄 Arquivo: `getHatsEstoque.spec.js`
+
+O objetivo deste teste é garantir que o endpoint `/api/estoque` retorne corretamente a lista de chapéus disponíveis.
+
+```js
+test('Listar produtos em estoque', async ({ request }) => {
+  const response = await request.get(`${BASE_URL}/api/estoque`);
+  expect(response.ok()).toBeTruthy();
+  const hats = await response.json();
+  expect(hats.length).toBeGreaterThan(0);
+  expect(hats[0]).toHaveProperty('nome');
+});
+```
+
+💡 **O que o QA aprende:**
+- Como validar uma resposta **GET**.  
+- Como converter a resposta em JSON (`response.json()`).  
+- Como validar que o array retornado contém dados reais.  
+
+🧩 **Exercício prático:**
+> Adicione uma validação extra garantindo que todos os chapéus tenham `quantidade > 0`.
+
+---
+
+## 💰 Módulo 5 — Teste 3: Criação de Pedido com Cupom
+
+### 📄 Arquivo: `postHatsPedidos.spec.js`
+
+Este teste cobre o fluxo de criação de pedido e valida a aplicação do cupom **HATOFF**, que dá desconto no primeiro pedido.
+
+```js
+test('Criar pedido com cupom HATOFF', async ({ request }) => {
+  const response = await request.post(`${BASE_URL}/api/pedido`, {
+    data: pedido,
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  expect(response.status()).toBe(200);
+  const body = await response.text();
+  expect(body).toContain("Pedido registrado com sucesso");
+});
+```
+
+💡 **O que o QA aprende:**
+- Como enviar requisições **autenticadas com token JWT**.  
+- Como validar regras de negócio (ex: cupom apenas no primeiro pedido).  
+- Como ler a resposta textual de um POST.  
+
+🧩 **Exercícios práticos:**
+1. Crie um novo teste que tente aplicar o cupom “HATOFF” duas vezes.  
+2. Simule um pedido com CPF inválido e valide o erro retornado (`400`).  
+
+---
+
+## 🧩 Módulo 6 — Arquivos de Apoio
+
+### 📦 `helpers.js`
+Contém funções para gerar usuários aleatórios e tokens.  
+Utiliza **Faker.js** para criar dados únicos a cada teste.
+
+### 🔐 `authFixture.js`
+Cria automaticamente um usuário e gera um **token JWT** antes da execução dos testes protegidos.
+
+### 📦 `jsonFiles`
+Guarda os corpos das requisições (`BodyPostHatPedido.json`, `BodyPostRegisterUer.json`).  
+Esses arquivos ajudam a manter os testes organizados e fáceis de entender.
+
+💡 **O que o QA aprende:**
+- Separar dados de lógica.  
+- Reutilizar código com helpers.  
+- Executar testes autenticados sem precisar logar manualmente.
+
+---
+
+## ⚙️ Módulo 7 — Execução e Relatórios
+
+Após configurar o ambiente (`.env.dev`), execute os testes com:
+
+```bash
+npm run test:dev
+```
+
+O Playwright gera automaticamente um relatório HTML com os resultados:  
+
+```bash
+npx playwright show-report
+```
+
+💡 **Dica:**  
+Ao abrir o relatório, analise:
+- Status de cada teste (✅ ou ❌)  
+- Tempo de execução  
+- Logs e traces das requisições
+
+🧩 **Exercício prático:**
+> Execute a suíte completa e verifique qual teste teve o maior tempo de execução.
+
+---
+
+## 💡 Módulo 8 — Boas Práticas
+
+| Boa Prática | Descrição |
+|--------------|------------|
+| **Isolar dados** | Evite dependência entre testes |
+| **Usar helpers e fixtures** | Centralize funções comuns |
+| **Reutilizar JSONs** | Mantenha consistência nos payloads |
+| **Validar status e body** | Sempre confirme o comportamento esperado |
+| **Manter nomes claros** | Nomes de testes devem refletir a ação validada |
+
+🧩 **Exercício prático:**
+> Escolha um dos testes existentes e refatore um trecho de código duplicado para um helper.
+
+---
+
+## 🔗 Módulo 9 — Integração com o Frontend
+
+A automação de API do Crescer_API é parte essencial do fluxo da Hat Store.  
+O frontend consome diretamente os endpoints testados aqui:
+
+| Tela do Frontend | Endpoint da API |
+|------------------|----------------|
+| Cadastro de usuário | `/auth/register` |
+| Lista de chapéus | `/api/estoque` |
+| Pedido com cupom | `/api/pedido` |
+
+💡 **O que o QA aprende:**
+- Garantir que o backend esteja validado antes de testar o front.  
+- Compreender a ligação entre **camadas de teste** (API → UI).
+
+🧩 **Exercício prático:**
+> Execute o front e os testes de API simultaneamente e observe o comportamento integrado.
+
+---
+
+## 🎓 Conclusão
+
+Neste módulo, você aprendeu a:  
+✅ Escrever testes de API com Playwright.  
+✅ Validar respostas reais e status codes.  
+✅ Automatizar fluxos completos de cadastro, estoque e pedidos.  
+✅ Usar helpers, fixtures e JSONs para manter código limpo e sustentável.
+
+> 💬 *“Cada teste é uma garantia de qualidade. Automatizar é construir confiança.”*
+
+---
+
+### 👥 Autores
+| Nome | Função | LinkedIn |
+|------|--------|-----------|
+| **Marcelo Feiteiro** | Backend e automação QA | [linkedin.com/in/marcelo-feiteiro-96a7a4142](https://www.linkedin.com/in/marcelo-feiteiro-96a7a4142/) |
+| **Joelma Prestes Ferreira** | Documentação, QA e integração front/back | [linkedin.com/in/joprestes](https://www.linkedin.com/in/joprestes) |
+
+---
+
+**📄 Fim do Guia — Crescer_API**  
+*Programa Crescer – Automação de Testes Backend*
