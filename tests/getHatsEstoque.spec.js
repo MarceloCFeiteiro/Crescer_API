@@ -3,7 +3,7 @@ import { HatStoreApi } from '../api/hatStoreApi.js';
 
 test.describe('Testes Loja de Chapeus Get do Estoque', () => {
 
-    test.only('Buscar Estoque', async ({ request }) => {
+    test('Buscar Estoque', async ({ request }) => {
 
         //ARRANJE
         const hatApi = new HatStoreApi(request);

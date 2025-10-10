@@ -1,0 +1,5 @@
+{
+    "email": "string",
+    "password": "string",
+    "rememberMe": true
+}

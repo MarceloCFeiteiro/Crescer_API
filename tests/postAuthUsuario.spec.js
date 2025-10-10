@@ -2,7 +2,7 @@ import { test } from '../fixtures/authFixture.js';
 import { expect } from '@playwright/test';
 import body from '../api/jsonFiles/BodyPostRegisterUer.json' assert { type: 'json' };
 import { HatStoreApi } from '../api/hatStoreApi.js';
-import { CreateUserToRegister } from '../utils/helpers.js';
+import {CreateUserToRegister} from  '../utils/helpers.js'
 
 let hatApi;
 
@@ -14,7 +14,7 @@ test.describe('Registar Usuario No Sistema', () => {
     test('Realizar Cadastro De Usuário Com Sucesso', async () => {
 
         //ARRANJE
-        let modifiedBody = await CreateUserToRegister(body)
+        let modifiedBody = await CreateUserToRegister(body);
 
         //ACT
         const response = await hatApi.post('/auth/register', modifiedBody);
@@ -45,7 +45,7 @@ test.describe('Registar Usuario No Sistema', () => {
      test('Realizar Cadastro De Usuário Com email Igual 110', async ({ user }) => {
 
         //ARRANJE
-        user.email = 100
+        user.email = 100;
 
         //ACT
         const response = await hatApi.post('/auth/register', user);

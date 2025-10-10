@@ -30,6 +30,4 @@ export async function getTokenAuthentication(request, user) {
 
     const data = await response.json();
     return data.token;
-
-
 }
