@@ -30,5 +30,16 @@ test.describe('Teste de Login', () => {
         expect(jwtRegex.test(data.token)).toBeTruthy();
     });
 
-    
+    test('Realizar Login Inválido', async () => {
+        //ARRANJE
+        bodyLogin.email = "invalido1.com.br";
+        bodyLogin.password = "123qa3123123";
+        //ACT
+        const response = await hatApi.post('/auth/login', bodyLogin)
+        //ASSERT
+        expect(await response.status()).toBe(401);
+        expect(await response.text()).toBe("Email ou senha inválidos\n");
+
+    });
+
 })
